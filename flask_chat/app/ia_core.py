@@ -5,10 +5,8 @@ import google.generativeai as genai
 from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS  # Atualização de import
 from langchain.chains import RetrievalQA
-from langchain.memory import ConversationBufferMemory
-from langchain.agents import initialize_agent, AgentType
 from langchain.schema import HumanMessage, SystemMessage
 
 # Carregando API Key
@@ -44,30 +42,12 @@ def setup_rag():
 
 rag_chain = setup_rag()
 
-# ===== AGENTE CONVERSACIONAL =====
-def get_agent():
-    llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.7, google_api_key=api_key)
-    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-    system_prompt = """
-    Você é um tutor de IA amigável e experiente. Explique conceitos de forma clara e adaptada ao nível técnico médio.
-    """
-    return initialize_agent(
-        llm=llm,
-        tools=[],
-        agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION,
-        memory=memory,
-        verbose=True,
-        agent_kwargs={"prefix": system_prompt}
-    )
-
-agent = get_agent()
-
 # ===== JUÍZ =====
 juiz = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.3, google_api_key=api_key)
 
-def avaliar_resposta(pergunta, resposta_tutor):
+def avaliar_resposta(pergunta, resposta):
     prompt_juiz = '''
-    Você é um avaliador imparcial. Sua tarefa é revisar a resposta de um tutor de IA para uma pergunta de aluno.
+    Você é um avaliador imparcial. Sua tarefa é revisar a resposta de um sistema de IA para uma pergunta de aluno.
 
     Critérios:
     - A resposta está tecnicamente correta?
@@ -79,6 +59,6 @@ def avaliar_resposta(pergunta, resposta_tutor):
     '''
     mensagens = [
         SystemMessage(content=prompt_juiz),
-        HumanMessage(content=f"Pergunta do aluno: {pergunta}\n\nResposta do tutor: {resposta_tutor}")
+        HumanMessage(content=f"Pergunta do aluno: {pergunta}\n\nResposta do sistema: {resposta}")
     ]
     return juiz.invoke(mensagens).content

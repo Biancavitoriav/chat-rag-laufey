@@ -4,7 +4,6 @@ import os
 from app import ia_core
 
 rag_chain = ia_core.rag_chain
-agent = ia_core.agent
 avaliar_resposta = ia_core.avaliar_resposta
 
 bp = Blueprint("chat", __name__)
@@ -37,7 +36,6 @@ def carregar_historico():
                 })
     return historico
 
-
 @bp.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
@@ -45,16 +43,12 @@ def index():
             msg = request.form["mensagem"]
             registrar_log("usuario", msg)
 
-            # Corrigido para usar invoke com chave 'query'
             rag_result = rag_chain.invoke({"query": msg})
-            fonte_valida = rag_result['result']
+            resposta = rag_result["result"]
 
-            resposta_final = agent.run(msg)
+            avaliacao = avaliar_resposta(msg, resposta)
 
-            avaliacao = avaliar_resposta(msg, resposta_final)
-
-            registrar_log("atendente", f"RAG: {fonte_valida}")
-            registrar_log("atendente", f"TUTOR: {resposta_final}")
+            registrar_log("atendente", f"RAG: {resposta}")
             registrar_log("atendente", f"AVALIAÇÃO: {avaliacao}")
 
         elif "encerrar" in request.form:
