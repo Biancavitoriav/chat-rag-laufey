@@ -60,6 +60,8 @@ def index():
             # registra a mensagem do usuário dentro do arquivo de log
             registrar_log("usuario", msg)
 
+            print(f"Mensagem recebida: {msg}")  # Log para depuração
+
             # pede a resposta da API para pergunta do usuário
             rag_result = rag_chain.invoke({"query": msg})
 

@@ -21,9 +21,12 @@ def setup_rag():
     for nome in os.listdir("documentos"):
         # selecionando todos arquivos que terminam com ".txt" 1 a 1
         if nome.endswith(".txt"):
+            print(f"Carregando arquivo: {nome}")  # Log para depuração
 
             # pegando o caminho relativo deles
             caminho = os.path.join("documentos", nome)
+            
+            print(f"Path do arquivo : {caminho}\n")  # Log para depuração
 
             # transformando texto em um formato entendivel para a IA
             loader = TextLoader(caminho, encoding="utf-8")
@@ -69,6 +72,7 @@ def avaliar_resposta(pergunta, resposta):
 
     Critérios:
     - A resposta está tecnicamente correta?
+    - A resposta condiz com as informações disponíveis nos documentos?
     - Está clara para o nível médio técnico?
     - O próximo passo sugerido está bem formulado?
 
