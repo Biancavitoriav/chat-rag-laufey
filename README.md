@@ -30,8 +30,7 @@ e substitua <chave> pela chave obtida no gemini
 2. Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/la-laufey-chat.git
-cd praticaFlaskIa
+git clone https://github.com/Biancavitoriav/chat-rag-laufey.git
 cd flask_chat
 ```
 
@@ -44,6 +43,8 @@ pip install -r requirements.txt
 4. Rode
 
 ```bash
+python.exe -m venv .venv
 venv\Scripts\Activate
+
 flask run
 ```
