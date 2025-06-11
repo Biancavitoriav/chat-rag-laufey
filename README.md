@@ -23,9 +23,9 @@ https://aistudio.google.com/app/apikey?hl=pt-br
 
 Crie um arquivo .env em praticaFlaskIa/flask_chat/.env com o conteúdo:
 
-GEMINI_API_KEY=<chave>
+GEMINI_API_KEY=abc123
 
-e substitua <chave> pela chave obtida no gemini
+e substitua "abc123" pela chave obtida no gemini
 
 2. Clone o repositório:
 
